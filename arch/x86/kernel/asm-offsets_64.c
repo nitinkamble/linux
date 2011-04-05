@@ -3,9 +3,13 @@
 #define __NO_STUBS 1
 #undef __SYSCALL
 #undef _ASM_X86_UNISTD_64_H
+#undef _ASM_X86_UNISTD_X32_H
 #define __SYSCALL(nr, sym) [nr] = 1,
 static char syscalls[] = {
-#include <asm/unistd.h>
+#include <asm/unistd_64.h>
+#ifdef CONFIG_X86_X32_ABI
+# include <asm/unistd_x32.h>
+#endif
 };
 
 int main(void)

@@ -17,13 +17,13 @@ extern unsigned long vm_stack_flags, vm_stack_flags32;
 extern unsigned long vm_data_default_flags, vm_data_default_flags32;
 extern unsigned long vm_force_exec32;
 
-#ifdef TIF_IA32
+#ifdef TIF_ADDR32
 #define VM_DATA_DEFAULT_FLAGS \
-	(test_thread_flag(TIF_IA32) ? vm_data_default_flags32 : \
+	(test_thread_flag(TIF_ADDR32) ? vm_data_default_flags32 : \
 	  vm_data_default_flags)
 
 #define VM_STACK_DEFAULT_FLAGS \
-	(test_thread_flag(TIF_IA32) ? vm_stack_flags32 : vm_stack_flags)
+	(test_thread_flag(TIF_ADDR32) ? vm_stack_flags32 : vm_stack_flags)
 #endif
 
 #define VM_DATA_DEFAULT_FLAGS vm_data_default_flags

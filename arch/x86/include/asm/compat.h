@@ -6,6 +6,8 @@
  */
 #include <linux/types.h>
 #include <linux/sched.h>
+#include <linux/percpu.h>
+#include <asm/processor.h>
 #include <asm/user32.h>
 
 #define COMPAT_USER_HZ		100
@@ -207,8 +209,20 @@ static inline compat_uptr_t ptr_to_compat(void __user *uptr)
 
 static inline void __user *arch_compat_alloc_user_space(long len)
 {
+#ifdef CONFIG_X86_X32_ABI
+	compat_uptr_t sp;
+
+	if (test_thread_flag(TIF_IA32))
+		sp = task_pt_regs(current)->sp;
+	else
+		sp = percpu_read(old_rsp);
+
+	/* -128 for the x32 ABI redzone */
+	return (void __user *)round_down(sp - len - 128, 16);
+#else
 	struct pt_regs *regs = task_pt_regs(current);
 	return (void __user *)regs->sp - len;
+#endif
 }
 
 static inline int is_compat_task(void)
