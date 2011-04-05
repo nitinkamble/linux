@@ -9,11 +9,14 @@
 
 #define __SYSCALL(nr, sym) extern asmlinkage void sym(void) ;
 #undef _ASM_X86_UNISTD_64_H
+#undef _ASM_X86_UNISTD_X32_H
 #include <asm/unistd_64.h>
+#include <asm/unistd_x32.h>
 
 #undef __SYSCALL
 #define __SYSCALL(nr, sym) [nr] = sym,
 #undef _ASM_X86_UNISTD_64_H
+#undef _ASM_X86_UNISTD_X32_H
 
 typedef void (*sys_call_ptr_t)(void);
 
@@ -26,4 +29,7 @@ const sys_call_ptr_t sys_call_table[__NR_syscall_max+1] = {
 	*/
 	[0 ... __NR_syscall_max] = &sys_ni_syscall,
 #include <asm/unistd_64.h>
+#ifdef CONFIG_X86_X32_ABI
+# include <asm/unistd_x32.h>
+#endif
 };

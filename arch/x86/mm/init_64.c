@@ -874,7 +874,7 @@ static struct vm_area_struct gate_vma = {
 struct vm_area_struct *get_gate_vma(struct task_struct *tsk)
 {
 #ifdef CONFIG_IA32_EMULATION
-	if (test_tsk_thread_flag(tsk, TIF_IA32))
+	if (test_tsk_thread_flag(tsk, TIF_ADDR32))
 		return NULL;
 #endif
 	return &gate_vma;
