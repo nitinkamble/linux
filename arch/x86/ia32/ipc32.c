@@ -109,4 +109,13 @@ long compat_sys_x32_shmat(int first, void __user *uptr, int second)
 		return err;
 	return (long) raddr;
 }
+
+int compat_sys_x32_semctl(int semid, int semnum, int cmd, u32 arg)
+{
+	/* compat_sys_semctl expects a pointer to union semun */
+	u32 __user *uptr = compat_alloc_user_space(sizeof(u32));
+	if (put_user(arg, uptr))
+		return -EFAULT;
+	return compat_sys_semctl(semid, semnum, cmd, uptr);
+}
 #endif
