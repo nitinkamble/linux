@@ -303,11 +303,20 @@ do {									\
 			    (unsigned long)current->mm->context.vdso);	\
 } while (0)
 
+#define ARCH_DLINFO_X32							\
+do {									\
+	if (vdso_enabled)						\
+		NEW_AUX_ENT(AT_SYSINFO_EHDR,				\
+			    (unsigned long)current->mm->context.vdso);	\
+} while (0)
+
 #define AT_SYSINFO		32
 
 #define COMPAT_ARCH_DLINFO						\
-if (!test_thread_flag(TIF_X32))						\
-  ARCH_DLINFO_IA32(sysctl_vsyscall32)
+if (test_thread_flag(TIF_X32))						\
+	ARCH_DLINFO_X32;						\
+else									\
+	ARCH_DLINFO_IA32(sysctl_vsyscall32)
 
 #define COMPAT_ELF_ET_DYN_BASE	(TASK_UNMAPPED_BASE + 0x1000000)
 
