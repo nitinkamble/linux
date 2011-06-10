@@ -26,6 +26,12 @@ extern unsigned short vdso_sync_cpuid;
 static struct page **vdso_pages;
 static unsigned vdso_size;
 
+#ifdef CONFIG_X86_X32_ABI
+extern char vdsox32_start[], vdsox32_end[];
+static struct page **vdsox32_pages;
+static unsigned vdsox32_size;
+#endif
+
 static inline void *var_ref(void *p, char *name)
 {
 	if (*(void **)p != (void *)VMAGIC) {
@@ -68,6 +74,38 @@ static int __init init_vdso_vars(void)
 #include "vextern.h"
 #undef VEXTERN
 	vunmap(vbase);
+
+#ifdef CONFIG_X86_X32_ABI
+	npages = (vdsox32_end - vdsox32_start + PAGE_SIZE - 1) / PAGE_SIZE;
+	vdsox32_size = npages << PAGE_SHIFT;
+	vdsox32_pages = kmalloc(sizeof(struct page *) * npages, GFP_KERNEL);
+	if (!vdsox32_pages)
+		goto oom;
+	for (i = 0; i < npages; i++) {
+		struct page *p;
+		p = alloc_page(GFP_KERNEL);
+		if (!p)
+			goto oom;
+		vdsox32_pages[i] = p;
+		copy_page(page_address(p), vdsox32_start + i*PAGE_SIZE);
+	}
+
+	vbase = vmap(vdsox32_pages, npages, 0, PAGE_KERNEL);
+	if (!vbase)
+		goto oom;
+
+	if (memcmp(vbase, "\177ELF", 4)) {
+		printk("VDSO: I'm broken; not ELF\n");
+		vdso_enabled = 0;
+	}
+
+#define VEXTERN(x) \
+	*(typeof(__ ## x) **) var_ref(VDSOX32_SYMBOL(vbase, x), #x) = &__ ## x;
+#include "vextern.h"
+#undef VEXTERN
+	vunmap(vbase);
+#endif
+
 	return 0;
 
  oom:
@@ -101,7 +139,10 @@ static unsigned long vdso_addr(unsigned long start, unsigned len)
 
 /* Setup a VMA at program startup for the vsyscall page.
    Not called for compat tasks */
-int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+static int setup_additional_pages(struct linux_binprm *bprm,
+				  int uses_interp,
+				  struct page **pages,
+				  unsigned size)
 {
 	struct mm_struct *mm = current->mm;
 	unsigned long addr;
@@ -111,8 +152,8 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
 		return 0;
 
 	down_write(&mm->mmap_sem);
-	addr = vdso_addr(mm->start_stack, vdso_size);
-	addr = get_unmapped_area(NULL, addr, vdso_size, 0, 0);
+	addr = vdso_addr(mm->start_stack, size);
+	addr = get_unmapped_area(NULL, addr, size, 0, 0);
 	if (IS_ERR_VALUE(addr)) {
 		ret = addr;
 		goto up_fail;
@@ -120,11 +161,11 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
 
 	current->mm->context.vdso = (void *)addr;
 
-	ret = install_special_mapping(mm, addr, vdso_size,
+	ret = install_special_mapping(mm, addr, size,
 				      VM_READ|VM_EXEC|
 				      VM_MAYREAD|VM_MAYWRITE|VM_MAYEXEC|
 				      VM_ALWAYSDUMP,
-				      vdso_pages);
+				      pages);
 	if (ret) {
 		current->mm->context.vdso = NULL;
 		goto up_fail;
@@ -134,6 +175,20 @@ up_fail:
 	up_write(&mm->mmap_sem);
 	return ret;
 }
+
+int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+{
+	return setup_additional_pages (bprm, uses_interp, vdso_pages,
+				       vdso_size);
+}
+
+#ifdef CONFIG_X86_X32_ABI
+int x32_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+{
+	return setup_additional_pages (bprm, uses_interp, vdsox32_pages,
+				       vdsox32_size);
+}
+#endif
 
 static __init int vdso_setup(char *s)
 {

@@ -15,6 +15,20 @@ extern const char VDSO64_PRELINK[];
 })
 #endif
 
+#ifdef CONFIG_X86_X32_ABI
+extern const char VDSOX32_PRELINK[];
+
+/*
+ * Given a pointer to the vDSO image, find the pointer to VDSOX32_name
+ * as that symbol is defined in the vDSO sources or linker script.
+ */
+#define VDSOX32_SYMBOL(base, name)					\
+({									\
+	extern const char VDSOX32_##name[];				\
+	(void *)(VDSOX32_##name - VDSOX32_PRELINK + (unsigned long)(base)); \
+})
+#endif
+
 #if defined CONFIG_X86_32 || defined CONFIG_COMPAT
 extern const char VDSO32_PRELINK[];
 
