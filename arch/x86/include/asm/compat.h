@@ -187,7 +187,17 @@ struct compat_shmid64_ds {
 /*
  * The type of struct elf_prstatus.pr_reg in compatible core dumps.
  */
+#ifdef CONFIG_X86_X32_ABI
+typedef struct user_regs_struct compat_elf_gregset_t;
+
+#define PR_REG_SIZE(S) (test_thread_flag(TIF_IA32) ? 68 : 216)
+#define PRSTATUS_SIZE(S) (test_thread_flag(TIF_IA32) ? 144 : 296)
+#define SET_PR_FPVALID(S,V) \
+  do { *(int *) (((void *) &((S)->pr_reg)) + PR_REG_SIZE(0)) = (V); } \
+  while (0)
+#else
 typedef struct user_regs_struct32 compat_elf_gregset_t;
+#endif
 
 /*
  * A pointer passed in from user mode. This should not
