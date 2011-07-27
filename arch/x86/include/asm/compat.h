@@ -237,7 +237,11 @@ static inline void __user *arch_compat_alloc_user_space(long len)
 
 static inline int is_compat_task(void)
 {
-	return current_thread_info()->status & TS_COMPAT;
+	return (current_thread_info()->status & TS_COMPAT)
+#ifdef CONFIG_X86_X32_ABI
+	       || (task_pt_regs(current)->orig_ax & __X32_SYSCALL_BIT)
+#endif
+		;
 }
 
 #endif /* _ASM_X86_COMPAT_H */

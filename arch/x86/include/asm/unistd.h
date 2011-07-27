@@ -3,7 +3,7 @@
 #  include "unistd_32.h"
 # else
 #  include "unistd_64.h"
-#  include "unistd_x32.h"
+#  include "unistd_64_compat.h"
 # endif
 #else
 # ifdef __i386__
