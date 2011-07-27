@@ -10,7 +10,7 @@
 #endif
 
 /* X32 system call mask.  */
-#define __X32_SYSCALL_BIT	0x80000000
+#define __X32_SYSCALL_BIT	0x40000000
 
 /* The first x32 system call.  */
 #define __X32_SYSCALL_BASE	512
