@@ -691,17 +691,17 @@ __SYSCALL(__NR_fanotify_init, sys_fanotify_init)
 __SYSCALL(__NR_fanotify_mark, sys_fanotify_mark)
 #define __NR_prlimit64				__NR_COMMON_SYSCALL(302)
 __SYSCALL(__NR_prlimit64, sys_prlimit64)
-#define __NR_name_to_handle_at			303
+#define __NR_name_to_handle_at			__NR_COMMON_SYSCALL(303)
 __SYSCALL(__NR_name_to_handle_at, sys_name_to_handle_at)
-#define __NR_open_by_handle_at			304
-__SYSCALL(__NR_open_by_handle_at, sys_open_by_handle_at)
-#define __NR_clock_adjtime			305
-__SYSCALL(__NR_clock_adjtime, sys_clock_adjtime)
-#define __NR_syncfs                             306
+#define __NR_64_open_by_handle_at               304
+__SYSCALL(__NR_64_open_by_handle_at, sys_open_by_handle_at)
+#define __NR_64_clock_adjtime			305
+__SYSCALL(__NR_64_clock_adjtime, sys_clock_adjtime)
+#define __NR_syncfs                             __NR_COMMON_SYSCALL(306)
 __SYSCALL(__NR_syncfs, sys_syncfs)
-#define __NR_sendmmsg				307
-__SYSCALL(__NR_sendmmsg, sys_sendmmsg)
-#define __NR_setns				308
+#define __NR_64_sendmmsg			307
+__SYSCALL(__NR_64_sendmmsg, sys_sendmmsg)
+#define __NR_setns				__NR_COMMON_SYSCALL(308)
 __SYSCALL(__NR_setns, sys_setns)
 
 /* X32 support.  */
@@ -906,6 +906,13 @@ __X32_SYSCALL(__NR_x32_fstatfs64, compat_sys_fstatfs64)
 __X32_SYSCALL(__NR_x32_getcpu, sys_getcpu)
 #define __NR_x32_recvmmsg			__NR_X32_SYSCALL(94)
 __X32_SYSCALL(__NR_x32_recvmmsg, compat_sys_recvmmsg)
+#define __NR_x32_open_by_handle_at              __NR_X32_SYSCALL(95)
+__SYSCALL(__NR_x32_open_by_handle_at, compat_sys_open_by_handle_at)
+
+#define __NR_x32_clock_adjtime			__NR_X32_SYSCALL(96)
+__SYSCALL(__NR_x32_clock_adjtime, compat_sys_clock_adjtime)
+#define __NR_x32_sendmmsg			__NR_X32_SYSCALL(97)
+__SYSCALL(__NR_x32_sendmmsg, compat_sys_sendmmsg)
 
 #ifndef __NO_STUBS
 #define __ARCH_WANT_OLD_READDIR

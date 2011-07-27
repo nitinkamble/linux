@@ -90,5 +90,8 @@
 #define __NR_signalfd4			__NR_64_signalfd4
 #define __NR_rt_tgsigqueueinfo		__NR_64_rt_tgsigqueueinfo
 #define __NR_recvmmsg			__NR_64_recvmmsg
+#define __NR_open_by_handle_at		__NR_64_open_by_handle_at
+#define __NR_clock_adjtime		__NR_64_clock_adjtime
+#define __NR_sendmmsg			__NR_64_sendmmsg
 
 #endif /* _ASM_X86_UNISTD_64_COMPAT_H */
