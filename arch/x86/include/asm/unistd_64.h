@@ -703,6 +703,8 @@ __SYSCALL(__NR_syncfs, sys_syncfs)
 __SYSCALL(__NR_64_sendmmsg, sys_sendmmsg)
 #define __NR_setns				__NR_COMMON_SYSCALL(308)
 __SYSCALL(__NR_setns, sys_setns)
+#define __NR_getcpu				309
+__SYSCALL(__NR_getcpu, sys_getcpu)
 
 /* X32 support.  */
 #define __NR_x32_open				__NR_X32_SYSCALL(0)
