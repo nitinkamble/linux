@@ -108,7 +108,7 @@ static int __init init_vdso(void)
 	npages = (vdsox32_end - vdsox32_start + PAGE_SIZE - 1) / PAGE_SIZE;
 	vdsox32_size = npages << PAGE_SHIFT;
 	for (i = 0; i < npages; i++)
-		vdso_pages[i] = virt_to_page(vdsox32_start + i*PAGE_SIZE);
+		vdsox32_pages[i] = virt_to_page(vdsox32_start + i*PAGE_SIZE);
 #endif
 
 	return 0;
