@@ -176,6 +176,11 @@ PHONY += vdso_install
 vdso_install:
 	$(Q)$(MAKE) $(build)=arch/x86/vdso $@
 
+arch/x86/include/asm/unistd_x32.h: arch/x86/include/asm/unistd_64.h
+	sed -e "s/_NR_x32_/_NR_/g" \
+	    -e "s/_ASM_X86_UNISTD_64_H/_ASM_X86_UNISTD_X32_H/g" \
+	    $^ | grep -v "__NR_64_" > $@
+
 archclean:
 	$(Q)rm -rf $(objtree)/arch/i386
 	$(Q)rm -rf $(objtree)/arch/x86_64

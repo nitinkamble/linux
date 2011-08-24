@@ -1,10 +1,3 @@
-/* Generated with
- 
-   sed -e "s/_NR_x32_/_NR_/g" \
-       -e "s/_ASM_X86_UNISTD_64_H/_ASM_X86_UNISTD_X32_H/g" \
-       unistd_64.h | grep -v "__NR_64_" > unistd_x32.h
- */
-
 #ifndef _ASM_X86_UNISTD_X32_H
 #define _ASM_X86_UNISTD_X32_H
 
@@ -526,6 +519,8 @@ __SYSCALL(__NR_name_to_handle_at, sys_name_to_handle_at)
 __SYSCALL(__NR_syncfs, sys_syncfs)
 #define __NR_setns				__NR_COMMON_SYSCALL(308)
 __SYSCALL(__NR_setns, sys_setns)
+#define __NR_getcpu				__NR_COMMON_SYSCALL(309)
+__SYSCALL(__NR_getcpu, sys_getcpu)
 
 /* X32 support.  */
 #define __NR_open				__NR_X32_SYSCALL(0)
@@ -725,16 +720,14 @@ __X32_SYSCALL(__NR_lstat64, sys32_lstat64)
 __X32_SYSCALL(__NR_statfs64, compat_sys_statfs64)
 #define __NR_fstatfs64			__NR_X32_SYSCALL(92)
 __X32_SYSCALL(__NR_fstatfs64, compat_sys_fstatfs64)
-#define __NR_getcpu				__NR_X32_SYSCALL(93)
-__X32_SYSCALL(__NR_getcpu, sys_getcpu)
-#define __NR_recvmmsg			__NR_X32_SYSCALL(94)
+#define __NR_recvmmsg			__NR_X32_SYSCALL(93)
 __X32_SYSCALL(__NR_recvmmsg, compat_sys_recvmmsg)
-#define __NR_open_by_handle_at              __NR_X32_SYSCALL(95)
+#define __NR_open_by_handle_at              __NR_X32_SYSCALL(94)
 __SYSCALL(__NR_open_by_handle_at, compat_sys_open_by_handle_at)
-
-#define __NR_clock_adjtime			__NR_X32_SYSCALL(96)
+#define __NR_clock_adjtime			__NR_X32_SYSCALL(95)
 __SYSCALL(__NR_clock_adjtime, compat_sys_clock_adjtime)
-#define __NR_sendmmsg			__NR_X32_SYSCALL(97)
+
+#define __NR_sendmmsg			__NR_X32_SYSCALL(96)
 __SYSCALL(__NR_sendmmsg, compat_sys_sendmmsg)
 
 #ifndef __NO_STUBS
