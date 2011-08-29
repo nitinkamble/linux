@@ -30,7 +30,6 @@
 #define __NR_fcntl			__NR_64_fcntl
 #define __NR_getdents			__NR_64_getdents
 #define __NR_gettimeofday		__NR_64_gettimeofday
-#define __NR_getrlimit			__NR_64_getrlimit
 #define __NR_getrusage			__NR_64_getrusage
 #define __NR_sysinfo			__NR_64_sysinfo
 #define __NR_times			__NR_64_times
@@ -45,7 +44,6 @@
 #define __NR_sched_rr_get_interval	__NR_64_sched_rr_get_interval
 #define __NR__sysctl			__NR_64__sysctl
 #define __NR_adjtimex			__NR_64_adjtimex
-#define __NR_setrlimit			__NR_64_setrlimit
 #define __NR_settimeofday		__NR_64_settimeofday
 #define __NR_quotactl			__NR_64_quotactl
 #define __NR_nfsservctl			__NR_64_nfsservctl
