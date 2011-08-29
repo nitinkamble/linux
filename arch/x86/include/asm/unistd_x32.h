@@ -626,7 +626,7 @@ __X32_SYSCALL(__NR_settimeofday, compat_sys_settimeofday)
 __X32_SYSCALL(__NR_quotactl, sys32_quotactl)
 
 #define __NR_nfsservctl			__NR_X32_SYSCALL(48)
-__X32_SYSCALL(__NR_nfsservctl, compat_sys_nfsservctl)
+__X32_SYSCALL(__NR_nfsservctl, sys_ni_syscall)
 #define __NR_time				__NR_X32_SYSCALL(49)
 __X32_SYSCALL(__NR_time, compat_sys_time)
 #define __NR_futex				__NR_X32_SYSCALL(50)

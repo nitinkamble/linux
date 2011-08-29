@@ -436,7 +436,7 @@ __SYSCALL(__NR_query_module, sys_ni_syscall)
 __SYSCALL(__NR_64_quotactl, sys_quotactl)
 
 #define __NR_64_nfsservctl			180
-__SYSCALL(__NR_64_nfsservctl, sys_nfsservctl)
+__SYSCALL(__NR_64_nfsservctl, sys_ni_syscall)
 
 /* reserved for LiS/STREAMS */
 #define __NR_getpmsg				__NR_COMMON_SYSCALL(181)
@@ -810,7 +810,7 @@ __X32_SYSCALL(__NR_x32_settimeofday, compat_sys_settimeofday)
 __X32_SYSCALL(__NR_x32_quotactl, sys32_quotactl)
 
 #define __NR_x32_nfsservctl			__NR_X32_SYSCALL(48)
-__X32_SYSCALL(__NR_x32_nfsservctl, compat_sys_nfsservctl)
+__X32_SYSCALL(__NR_x32_nfsservctl, sys_ni_syscall)
 #define __NR_x32_time				__NR_X32_SYSCALL(49)
 __X32_SYSCALL(__NR_x32_time, compat_sys_time)
 #define __NR_x32_futex				__NR_X32_SYSCALL(50)
