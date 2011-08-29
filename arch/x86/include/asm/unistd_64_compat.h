@@ -1,7 +1,6 @@
 #ifndef _ASM_X86_UNISTD_64_COMPAT_H
 #define _ASM_X86_UNISTD_64_COMPAT_H
 
-#define __NR_open			__NR_64_open
 #define __NR_stat			__NR_64_stat
 #define __NR_fstat			__NR_64_fstat
 #define __NR_lstat			__NR_64_lstat
