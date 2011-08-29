@@ -321,8 +321,8 @@ __SYSCALL(__NR_64_utime, sys_utime)
 __SYSCALL(__NR_mknod, sys_mknod)
 
 /* Only needed for a.out */
-#define __NR_uselib				__NR_COMMON_SYSCALL(134)
-__SYSCALL(__NR_uselib, sys_ni_syscall)
+#define __NR_64_uselib				134
+__SYSCALL(__NR_64_uselib, sys_ni_syscall)
 #define __NR_personality			__NR_COMMON_SYSCALL(135)
 __SYSCALL(__NR_personality, sys_personality)
 
@@ -421,16 +421,16 @@ __SYSCALL(__NR_iopl, stub_iopl)
 #define __NR_ioperm				__NR_COMMON_SYSCALL(173)
 __SYSCALL(__NR_ioperm, sys_ioperm)
 
-#define __NR_create_module			__NR_COMMON_SYSCALL(174)
-__SYSCALL(__NR_create_module, sys_ni_syscall)
+#define __NR_64_create_module			174
+__SYSCALL(__NR_64_create_module, sys_ni_syscall)
 #define __NR_init_module			__NR_COMMON_SYSCALL(175)
 __SYSCALL(__NR_init_module, sys_init_module)
 #define __NR_delete_module			__NR_COMMON_SYSCALL(176)
 __SYSCALL(__NR_delete_module, sys_delete_module)
-#define __NR_get_kernel_syms			__NR_COMMON_SYSCALL(177)
-__SYSCALL(__NR_get_kernel_syms, sys_ni_syscall)
-#define __NR_query_module			__NR_COMMON_SYSCALL(178)
-__SYSCALL(__NR_query_module, sys_ni_syscall)
+#define __NR_64_get_kernel_syms			177
+__SYSCALL(__NR_64_get_kernel_syms, sys_ni_syscall)
+#define __NR_64_query_module			178
+__SYSCALL(__NR_64_query_module, sys_ni_syscall)
 
 #define __NR_64_quotactl			179
 __SYSCALL(__NR_64_quotactl, sys_quotactl)
@@ -494,8 +494,8 @@ __SYSCALL(__NR_64_futex, sys_futex)
 __SYSCALL(__NR_64_sched_setaffinity, sys_sched_setaffinity)
 #define __NR_64_sched_getaffinity		204
 __SYSCALL(__NR_64_sched_getaffinity, sys_sched_getaffinity)
-#define __NR_set_thread_area			__NR_COMMON_SYSCALL(205)
-__SYSCALL(__NR_set_thread_area, sys_ni_syscall)	/* use arch_prctl */
+#define __NR_64_set_thread_area			205
+__SYSCALL(__NR_64_set_thread_area, sys_ni_syscall)	/* use arch_prctl */
 #define __NR_64_io_setup			206
 __SYSCALL(__NR_64_io_setup, sys_io_setup)
 #define __NR_io_destroy				__NR_COMMON_SYSCALL(207)
@@ -506,16 +506,16 @@ __SYSCALL(__NR_64_io_getevents, sys_io_getevents)
 __SYSCALL(__NR_64_io_submit, sys_io_submit)
 #define __NR_io_cancel				__NR_COMMON_SYSCALL(210)
 __SYSCALL(__NR_io_cancel, sys_io_cancel)
-#define __NR_get_thread_area			__NR_COMMON_SYSCALL(211)
-__SYSCALL(__NR_get_thread_area, sys_ni_syscall)	/* use arch_prctl */
+#define __NR_64_get_thread_area			211
+__SYSCALL(__NR_64_get_thread_area, sys_ni_syscall)	/* use arch_prctl */
 #define __NR_lookup_dcookie			__NR_COMMON_SYSCALL(212)
 __SYSCALL(__NR_lookup_dcookie, sys_lookup_dcookie)
 #define __NR_epoll_create			__NR_COMMON_SYSCALL(213)
 __SYSCALL(__NR_epoll_create, sys_epoll_create)
-#define __NR_epoll_ctl_old			__NR_COMMON_SYSCALL(214)
-__SYSCALL(__NR_epoll_ctl_old, sys_ni_syscall)
-#define __NR_epoll_wait_old			__NR_COMMON_SYSCALL(215)
-__SYSCALL(__NR_epoll_wait_old, sys_ni_syscall)
+#define __NR_64_epoll_ctl_old			214
+__SYSCALL(__NR_64_epoll_ctl_old, sys_ni_syscall)
+#define __NR_64_epoll_wait_old			215
+__SYSCALL(__NR_64_epoll_wait_old, sys_ni_syscall)
 #define __NR_remap_file_pages			__NR_COMMON_SYSCALL(216)
 __SYSCALL(__NR_remap_file_pages, sys_remap_file_pages)
 #define __NR_64_getdents64			217
@@ -556,8 +556,8 @@ __SYSCALL(__NR_epoll_ctl, sys_epoll_ctl)
 __SYSCALL(__NR_tgkill, sys_tgkill)
 #define __NR_64_utimes				235
 __SYSCALL(__NR_64_utimes, sys_utimes)
-#define __NR_vserver				__NR_COMMON_SYSCALL(236)
-__SYSCALL(__NR_vserver, sys_ni_syscall)
+#define __NR_64_vserver				236
+__SYSCALL(__NR_64_vserver, sys_ni_syscall)
 #define __NR_mbind				__NR_COMMON_SYSCALL(237)
 __SYSCALL(__NR_mbind, sys_mbind)
 #define __NR_set_mempolicy			__NR_COMMON_SYSCALL(238)
