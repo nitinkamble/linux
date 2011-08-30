@@ -71,7 +71,6 @@
 #define __NR_mq_getsetattr		__NR_64_mq_getsetattr
 #define __NR_kexec_load			__NR_64_kexec_load
 #define __NR_waitid			__NR_64_waitid
-#define __NR_openat			__NR_64_openat
 #define __NR_futimesat			__NR_64_futimesat
 #define __NR_newfstatat			__NR_64_newfstatat
 #define __NR_pselect6			__NR_64_pselect6
@@ -85,6 +84,8 @@
 #define __NR_timerfd_settime		__NR_64_timerfd_settime
 #define __NR_timerfd_gettime		__NR_64_timerfd_gettime
 #define __NR_signalfd4			__NR_64_signalfd4
+#define __NR_preadv			__NR_64_preadv
+#define __NR_pwritev			__NR_64_pwritev
 #define __NR_rt_tgsigqueueinfo		__NR_64_rt_tgsigqueueinfo
 #define __NR_recvmmsg			__NR_64_recvmmsg
 #define __NR_open_by_handle_at		__NR_64_open_by_handle_at
