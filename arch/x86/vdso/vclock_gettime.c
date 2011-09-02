@@ -25,23 +25,11 @@
 
 #define gtod (&VVAR(vsyscall_gtod_data))
 
-#ifdef IN_VDSOX32
-#define TIMESPEC compat_timespec
-#define TIMEVAL compat_timeval
-#define NR_CLOCK_GETTIME __NR_x32_clock_gettime
-#define NR_GETTIMEOFDAY __NR_x32_gettimeofday
-#else
-#define TIMESPEC timespec
-#define TIMEVAL timeval
-#define NR_CLOCK_GETTIME __NR_clock_gettime
-#define NR_GETTIMEOFDAY __NR_gettimeofday
-#endif
-
-notrace static long vdso_fallback_gettime(long clock, struct TIMESPEC *ts)
+notrace static long vdso_fallback_gettime(long clock, struct timespec *ts)
 {
 	long ret;
 	asm("syscall" : "=a" (ret) :
-	    "0" (NR_CLOCK_GETTIME),"D" (clock), "S" (ts) : "memory");
+	    "0" (__NR_clock_gettime),"D" (clock), "S" (ts) : "memory");
 	return ret;
 }
 
@@ -54,7 +42,7 @@ notrace static inline long vgetns(void)
 	return (v * gtod->clock.mult) >> gtod->clock.shift;
 }
 
-notrace static noinline void do_realtime(struct timespec *ts)
+notrace static noinline int do_realtime(struct timespec *ts)
 {
 	unsigned long seq, ns;
 	do {
@@ -64,9 +52,10 @@ notrace static noinline void do_realtime(struct timespec *ts)
 		ns = vgetns();
 	} while (unlikely(read_seqretry(&gtod->lock, seq)));
 	timespec_add_ns(ts, ns);
+	return 0;
 }
 
-notrace static noinline void do_monotonic(struct timespec *ts)
+notrace static noinline int do_monotonic(struct timespec *ts)
 {
 	unsigned long seq, ns, secs;
 	do {
@@ -86,9 +75,11 @@ notrace static noinline void do_monotonic(struct timespec *ts)
 	}
 	ts->tv_sec = secs;
 	ts->tv_nsec = ns;
+
+	return 0;
 }
 
-notrace static noinline void do_realtime_coarse(struct timespec *ts)
+notrace static noinline int do_realtime_coarse(struct timespec *ts)
 {
 	unsigned long seq;
 	do {
@@ -96,9 +87,10 @@ notrace static noinline void do_realtime_coarse(struct timespec *ts)
 		ts->tv_sec = gtod->wall_time_coarse.tv_sec;
 		ts->tv_nsec = gtod->wall_time_coarse.tv_nsec;
 	} while (unlikely(read_seqretry(&gtod->lock, seq)));
+	return 0;
 }
 
-notrace static noinline void do_monotonic_coarse(struct timespec *ts)
+notrace static noinline int do_monotonic_coarse(struct timespec *ts)
 {
 	unsigned long seq, ns, secs;
 	do {
@@ -118,71 +110,42 @@ notrace static noinline void do_monotonic_coarse(struct timespec *ts)
 	}
 	ts->tv_sec = secs;
 	ts->tv_nsec = ns;
+
+	return 0;
 }
 
-notrace int __vdso_clock_gettime(clockid_t clock, struct TIMESPEC *tsp)
+notrace int __vdso_clock_gettime(clockid_t clock, struct timespec *ts)
 {
-	struct timespec *ts;
-#ifdef IN_VDSOX32
-	struct timespec kts;
-	ts = &kts;
-#else
-	ts = tsp;
-#endif
 	if (likely(gtod->sysctl_enabled))
 		switch (clock) {
 		case CLOCK_REALTIME:
-			if (likely(gtod->clock.vread)) {
-				do_realtime(ts);
-				goto done;
-			}
+			if (likely(gtod->clock.vread))
+				return do_realtime(ts);
 			break;
 		case CLOCK_MONOTONIC:
-			if (likely(gtod->clock.vread)) {
-				do_monotonic(ts);
-				goto done;
-			}
+			if (likely(gtod->clock.vread))
+				return do_monotonic(ts);
 			break;
 		case CLOCK_REALTIME_COARSE:
-			do_realtime_coarse(ts);
-			goto done;
+			return do_realtime_coarse(ts);
 		case CLOCK_MONOTONIC_COARSE:
-			do_monotonic_coarse(ts);
-			goto done;
+			return do_monotonic_coarse(ts);
 		}
-	return vdso_fallback_gettime(clock, tsp);
-
-done:
-#ifdef IN_VDSOX32
-	tsp->tv_sec = ts->tv_sec;
-	tsp->tv_nsec = ts->tv_nsec;
-#endif
-	return 0;
+	return vdso_fallback_gettime(clock, ts);
 }
-int clock_gettime(clockid_t, struct TIMESPEC *)
+int clock_gettime(clockid_t, struct timespec *)
 	__attribute__((weak, alias("__vdso_clock_gettime")));
 
-notrace int __vdso_gettimeofday(struct TIMEVAL *tvp, struct timezone *tz)
+notrace int __vdso_gettimeofday(struct timeval *tv, struct timezone *tz)
 {
 	long ret;
 	if (likely(gtod->sysctl_enabled && gtod->clock.vread)) {
-		if (likely(tvp != NULL)) {
-			struct timeval *tv;
-#ifdef IN_VDSOX32
-			struct timeval ktv;
-			tv = &ktv;
-#else
-			tv = tvp;
-#endif
+		if (likely(tv != NULL)) {
 			BUILD_BUG_ON(offsetof(struct timeval, tv_usec) !=
 				     offsetof(struct timespec, tv_nsec) ||
 				     sizeof(*tv) != sizeof(struct timespec));
 			do_realtime((struct timespec *)tv);
 			tv->tv_usec /= 1000;
-#ifdef IN_VDSOX32
-			tvp->tv_sec = tv->tv_sec;
-			tvp->tv_usec = tv->tv_usec;
-#endif
 		}
 		if (unlikely(tz != NULL)) {
 			/* Avoid memcpy. Some old compilers fail to inline it */
@@ -192,10 +155,10 @@ notrace int __vdso_gettimeofday(struct TIMEVAL *tvp, struct timezone *tz)
 		return 0;
 	}
 	asm("syscall" : "=a" (ret) :
-	    "0" (NR_GETTIMEOFDAY), "D" (tvp), "S" (tz) : "memory");
+	    "0" (__NR_gettimeofday), "D" (tv), "S" (tz) : "memory");
 	return ret;
 }
-int gettimeofday(struct TIMEVAL *, struct timezone *)
+int gettimeofday(struct timeval *, struct timezone *)
 	__attribute__((weak, alias("__vdso_gettimeofday")));
 
 /* This will break when the xtime seconds get inaccurate, but that is

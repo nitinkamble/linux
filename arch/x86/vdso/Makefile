@@ -15,9 +15,6 @@ vdso-install-$(VDSO32-y)	+= $(vdso32-images)
 # files to link into the vdso
 vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o
 
-# Compile as 64bit and convert to x32 for x32 vDSO.
-vobjx32s-compat := vclock_gettime-compat.o
-
 vobjs-$(VDSOX32-y) += $(vobjx32s-compat)
 
 # Filter out x32 objects.
@@ -104,9 +101,7 @@ VDSO_LDFLAGS_vdsox32.lds = -Wl,-m,elf32_x86_64 \
 vobjx32s-y := $(vobj64s:.o=-x32.o)
 vobjx32s := $(foreach F,$(vobjx32s-y),$(obj)/$F)
 
-$(obj)/vclock_gettime-x32.o: $(obj)/vclock_gettime-compat.o
-	$(OBJCOPY) -O elf32-x86-64 $< $@
-
+# Convert 64bit object file to x32 for x32 vDSO.
 $(obj)/%-x32.o: $(obj)/%.o
 	$(OBJCOPY) -O elf32-x86-64 $< $@
 
