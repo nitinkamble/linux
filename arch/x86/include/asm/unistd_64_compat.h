@@ -17,7 +17,6 @@
 #define __NR_rt_sigtimedwait		__NR_64_rt_sigtimedwait
 #define __NR_rt_sigqueueinfo		__NR_64_rt_sigqueueinfo
 #define __NR_sigaltstack		__NR_64_sigaltstack
-#define __NR_sched_rr_get_interval	__NR_64_sched_rr_get_interval
 #define __NR__sysctl			__NR_64__sysctl
 #define __NR_nfsservctl			__NR_64_nfsservctl
 #define __NR_io_setup			__NR_64_io_setup
