@@ -11,7 +11,6 @@
 #define __NR_sendmsg			__NR_64_sendmsg
 #define __NR_recvmsg			__NR_64_recvmsg
 #define __NR_execve			__NR_64_execve
-#define __NR_sysinfo			__NR_64_sysinfo
 #define __NR_times			__NR_64_times
 #define __NR_rt_sigpending		__NR_64_rt_sigpending
 #define __NR_rt_sigtimedwait		__NR_64_rt_sigtimedwait
@@ -19,7 +18,6 @@
 #define __NR_sigaltstack		__NR_64_sigaltstack
 #define __NR__sysctl			__NR_64__sysctl
 #define __NR_nfsservctl			__NR_64_nfsservctl
-#define __NR_io_setup			__NR_64_io_setup
 #define __NR_timer_create		__NR_64_timer_create
 #define __NR_mq_notify			__NR_64_mq_notify
 #define __NR_kexec_load			__NR_64_kexec_load
