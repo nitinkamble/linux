@@ -195,6 +195,9 @@ typedef struct user_regs_struct compat_elf_gregset_t;
 #define SET_PR_FPVALID(S,V) \
   do { *(int *) (((void *) &((S)->pr_reg)) + PR_REG_SIZE(0)) = (V); } \
   while (0)
+
+#define COMPAT_USE_64BIT_TIME \
+  ((task_pt_regs(current)->orig_ax & __X32_SYSCALL_BIT) != 0)
 #else
 typedef struct user_regs_struct32 compat_elf_gregset_t;
 #endif
