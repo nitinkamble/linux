@@ -15,6 +15,9 @@
 
 #include <linux/sched.h>
 #include <linux/err.h>
+#ifdef CONFIG_X86_X32_ABI
+#include <asm/unistd.h>
+#endif
 
 extern const unsigned long sys_call_table[];
 

@@ -9,6 +9,9 @@
 #include <linux/percpu.h>
 #include <asm/processor.h>
 #include <asm/user32.h>
+#ifdef CONFIG_X86_X32_ABI
+#include <asm/unistd.h>
+#endif
 
 #define COMPAT_USER_HZ		100
 #define COMPAT_UTS_MACHINE	"i686\0\0"
