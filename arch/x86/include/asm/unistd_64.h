@@ -395,7 +395,7 @@ __SYSCALL(__NR_sync, sys_sync)
 #define __NR_acct				__NR_COMMON_SYSCALL(163)
 __SYSCALL(__NR_acct, sys_acct)
 
-#define __NR_settimeofday			__NR_COMMON_SYSCALL(163)
+#define __NR_settimeofday			__NR_COMMON_SYSCALL(164)
 __SYSCALL(__NR_settimeofday, sys_settimeofday)
 
 #define __NR_mount				__NR_COMMON_SYSCALL(165)
