@@ -2581,8 +2581,13 @@ static int do_siocgstamp(struct net *net, struct socket *sock,
 	err = sock_do_ioctl(net, sock, cmd, (unsigned long)&ktv);
 	set_fs(old_fs);
 	if (!err) {
-		err = put_user(ktv.tv_sec, &up->tv_sec);
-		err |= __put_user(ktv.tv_usec, &up->tv_usec);
+		if (COMPAT_USE_64BIT_TIME) {
+			err = __copy_to_user (up, &ktv,
+					      sizeof (struct timeval));
+		} else {
+			err = put_user(ktv.tv_sec, &up->tv_sec);
+			err |= __put_user(ktv.tv_usec, &up->tv_usec);
+		}
 	}
 	return err;
 }
@@ -2598,8 +2603,13 @@ static int do_siocgstampns(struct net *net, struct socket *sock,
 	err = sock_do_ioctl(net, sock, cmd, (unsigned long)&kts);
 	set_fs(old_fs);
 	if (!err) {
-		err = put_user(kts.tv_sec, &up->tv_sec);
-		err |= __put_user(kts.tv_nsec, &up->tv_nsec);
+		if (COMPAT_USE_64BIT_TIME) {
+			err = __copy_to_user (up, &kts,
+					      sizeof (struct timespec));
+		} else {
+			err = put_user(kts.tv_sec, &up->tv_sec);
+			err |= __put_user(kts.tv_nsec, &up->tv_nsec);
+		}
 	}
 	return err;
 }
