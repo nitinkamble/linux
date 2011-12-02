@@ -706,18 +706,26 @@ static long lp_compat_ioctl(struct file *file, unsigned int cmd,
 {
 	unsigned int minor;
 	struct timeval par_timeout;
-	struct compat_timeval __user *tc;
 	int ret;
 
 	minor = iminor(file->f_path.dentry->d_inode);
 	mutex_lock(&lp_mutex);
 	switch (cmd) {
 	case LPSETTIMEOUT:
-		tc = compat_ptr(arg);
-		if (get_user(par_timeout.tv_sec, &tc->tv_sec) ||
-		    get_user(par_timeout.tv_usec, &tc->tv_usec)) {
-			ret = -EFAULT;
-			break;
+		if (COMPAT_USE_64BIT_TIME) {
+			if (copy_from_user(&par_timeout, (void __user *)arg,
+						sizeof (struct timeval))) {
+				ret = -EFAULT;
+				break;
+			}
+		} else {
+			struct compat_timeval __user *tc;
+			tc = compat_ptr(arg);
+			if (get_user(par_timeout.tv_sec, &tc->tv_sec) ||
+			    get_user(par_timeout.tv_usec, &tc->tv_usec)) {
+				ret = -EFAULT;
+				break;
+			}
 		}
 		ret = lp_set_timeout(minor, &par_timeout);
 		break;
