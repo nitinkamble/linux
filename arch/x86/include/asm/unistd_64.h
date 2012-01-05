@@ -704,10 +704,10 @@ __SYSCALL(__NR_64_sendmmsg, sys_sendmmsg)
 __SYSCALL(__NR_setns, sys_setns)
 #define __NR_getcpu				__NR_COMMON_SYSCALL(309)
 __SYSCALL(__NR_getcpu, sys_getcpu)
-#define __NR_process_vm_readv			310
-__SYSCALL(__NR_process_vm_readv, sys_process_vm_readv)
-#define __NR_process_vm_writev			311
-__SYSCALL(__NR_process_vm_writev, sys_process_vm_writev)
+#define __NR_64_process_vm_readv		310
+__SYSCALL(__NR_64_process_vm_readv, sys_process_vm_readv)
+#define __NR_64_process_vm_writev		311
+__SYSCALL(__NR_64_process_vm_writev, sys_process_vm_writev)
 
 /* X32 support.  */
 #define __NR_x32_rt_sigaction			__NR_X32_SYSCALL(0)
@@ -769,6 +769,10 @@ __X32_SYSCALL(__NR_x32_rt_tgsigqueueinfo, compat_sys_rt_tgsigqueueinfo)
 __SYSCALL(__NR_x32_recvmmsg, compat_sys_recvmmsg)
 #define __NR_x32_sendmmsg			__NR_X32_SYSCALL(27)
 __SYSCALL(__NR_x32_sendmmsg, compat_sys_sendmmsg)
+#define __NR_x32_process_vm_readv		__NR_X32_SYSCALL(28)
+__SYSCALL(__NR_x32_process_vm_readv, compat_sys_process_vm_readv)
+#define __NR_x32_process_vm_writev		__NR_X32_SYSCALL(29)
+__SYSCALL(__NR_64_process_vm_writev, compat_sys_process_vm_writev)
 
 #ifndef __NO_STUBS
 #define __ARCH_WANT_OLD_READDIR

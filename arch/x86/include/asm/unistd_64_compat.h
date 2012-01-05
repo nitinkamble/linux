@@ -31,5 +31,7 @@
 #define __NR_rt_tgsigqueueinfo		__NR_64_rt_tgsigqueueinfo
 #define __NR_recvmmsg			__NR_64_recvmmsg
 #define __NR_sendmmsg			__NR_64_sendmmsg
+#define __NR_process_vm_readv		__NR_64_process_vm_readv
+#define __NR_process_vm_writev		__NR_64_process_vm_writev
 
 #endif /* _ASM_X86_UNISTD_64_COMPAT_H */
