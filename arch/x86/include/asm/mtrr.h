@@ -40,7 +40,7 @@ struct mtrr_sentry {
    But you need to use this for 64bit, otherwise your X server
    will break. */
 
-#ifndef __LP64__
+#ifdef __i386__
 struct mtrr_gentry {
     unsigned int regnum;   /*  Register number  */
     unsigned long base;    /*  Base address     */
@@ -48,7 +48,7 @@ struct mtrr_gentry {
     unsigned int type;     /*  Type of region   */
 };
 
-#else /* !__LP64__ */
+#else /* __i386__ */
 
 struct mtrr_gentry {
     unsigned long base;    /*  Base address     */
@@ -56,7 +56,7 @@ struct mtrr_gentry {
     unsigned int regnum;   /*  Register number  */
     unsigned int type;     /*  Type of region   */
 };
-#endif /* __LP64__ */
+#endif /* !__i386__ */
 
 struct mtrr_var_range {
 	__u32 base_lo;
